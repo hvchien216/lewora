@@ -11,7 +11,7 @@ export default function Index() {
           <div id="welcome">
             <h1>
               <span> Hello there, </span>
-              Welcome @lewora/web 👋
+              Welcome @lewora/nodeflow 👋
             </h1>
           </div>
 
@@ -395,7 +395,7 @@ export default function Index() {
                 </svg>
                 View project details
               </summary>
-              <pre>nx show project @lewora/web --web</pre>
+              <pre>nx show project @lewora/nodeflow --web</pre>
             </details>
             <details>
               <summary>

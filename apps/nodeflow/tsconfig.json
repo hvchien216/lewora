@@ -11,11 +11,9 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "plugins": [{
+      "name": "next"
+    }],
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -29,8 +27,8 @@
     "src/**/*.tsx",
     "src/**/*.js",
     "src/**/*.jsx",
-    "../../apps/web/.next/types/**/*.ts",
-    "../../dist/apps/web/.next/types/**/*.ts",
+    "../../apps/nodeflow/.next/types/**/*.ts",
+    "../../dist/apps/nodeflow/.next/types/**/*.ts",
     "next-env.d.ts"
   ],
   "exclude": [

@@ -142,7 +142,7 @@ importers:
         specifier: ^8.40.0
         version: 8.46.3(eslint@9.39.1(jiti@1.21.7))(typescript@5.9.3)
 
-  apps/web:
+  apps/nodeflow:
     dependencies:
       next:
         specifier: ~15.2.4
