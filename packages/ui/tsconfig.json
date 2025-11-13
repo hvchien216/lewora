@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "include": [],
+  "references": [{
+    "path": "./tsconfig.lib.json"
+  }],
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { // intentionally for shadcn/ui to understand if run "add" at apps/*
+    "baseUrl": ".",
+    "paths": {
+      "@lewora/ui/*": ["./src/*"]
+    }
+  }
+}
