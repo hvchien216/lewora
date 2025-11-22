@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
 import { resolve } from 'path';
-import { copyFileSync, mkdirSync } from 'fs';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 
 export default defineConfig({
   root: __dirname,
@@ -13,6 +13,7 @@ export default defineConfig({
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
+      insertTypesEntry: true,
     }),
     // Plugin to copy globals.css to dist
     {
@@ -27,6 +28,28 @@ export default defineConfig({
         } catch (err) {
           console.warn('Failed to copy globals.css:', err);
         }
+      },
+    },
+    {
+      name: 'add-use-client',
+      writeBundle() {
+        const files = ['dist/index.js', 'dist/index.cjs'];
+        files.forEach((file) => {
+          try {
+            const filePath = resolve(__dirname, file);
+            const content = readFileSync(filePath, 'utf-8');
+            // Only add if not already present
+            if (
+              !content.startsWith('"use client"') &&
+              !content.startsWith("'use client'")
+            ) {
+              writeFileSync(filePath, `"use client";\n${content}`);
+              console.log(`Added "use client" to ${file}`);
+            }
+          } catch (err) {
+            console.warn(`Could not add "use client" to ${file}:`, err);
+          }
+        });
       },
     },
   ],
@@ -47,14 +70,20 @@ export default defineConfig({
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
       name: '@lewora/ui',
-      fileName: 'index',
       // Change this to the formats you want to support.
       // Don't forget to update your package.json as well.
-      formats: ['es' as const],
+      formats: ['es', 'cjs', 'umd'],
+      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
     },
     rollupOptions: {
       // External packages that should not be bundled into your library.
       external: ['react', 'react-dom', 'react/jsx-runtime'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
+      },
     },
     cssCodeSplit: false,
   },
