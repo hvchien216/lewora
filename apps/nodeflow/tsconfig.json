@@ -11,11 +11,9 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "plugins": [{
+      "name": "next"
+    }],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
@@ -24,7 +22,11 @@
     "types": ["jest", "node"],
     "outDir": "dist",
     "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    // disabled there following options to avoid errors with the polar client
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false
   },
   "include": [
     "../../apps/nodeflow/.next/types/**/*.ts",
@@ -34,7 +36,7 @@
     "src/**/*.jsx",
     "src/**/*.ts",
     "src/**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
   ],
   "exclude": [
     "out-tsc",
@@ -48,9 +50,7 @@
     "eslint.config.cjs",
     "eslint.config.mjs"
   ],
-  "references": [
-    {
-      "path": "../../packages/ui"
-    }
-  ]
+  "references": [{
+    "path": "../../packages/ui"
+  }]
 }

@@ -1,2 +1,7 @@
 @import 'tailwindcss';
 @import '@lewora/ui/styles.css';
+
+/* React Flow node selection styles */
+.react-flow__node.selected #base-node {
+  /* @apply shadow-lg ring-3 ring-muted-foreground/25; */
+}
