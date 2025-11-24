@@ -1,41 +1,39 @@
+import type { SearchParams } from "nuqs";
 import { Suspense } from "react";
-import { SearchParams } from "nuqs";
 import { ErrorBoundary } from "react-error-boundary";
-
-import { HydrateClient } from "@/trpc/server";
-
-import { requireAuth } from "@/lib/auth-utils";
+import {
+	CredentialsContainer,
+	CredentialsError,
+	CredentialsList,
+	CredentialsLoading,
+} from "@/features/credentials/components/credentials";
+import { credentialsParamsLoader } from "@/features/credentials/server/params-loader";
 
 import { prefetchCredentials } from "@/features/credentials/server/prefetch";
-import { credentialsParamsLoader } from "@/features/credentials/server/params-loader";
-import {
-  CredentialsContainer,
-  CredentialsError,
-  CredentialsList,
-  CredentialsLoading,
-} from "@/features/credentials/components/credentials";
+import { requireAuth } from "@/lib/auth-utils";
+import { HydrateClient } from "@/trpc/server";
 
 type Props = {
-  searchParams: Promise<SearchParams>;
+	searchParams: Promise<SearchParams>;
 };
 
 const Credentials = async ({ searchParams }: Props) => {
-  await requireAuth();
+	await requireAuth();
 
-  const params = await credentialsParamsLoader(searchParams);
-  prefetchCredentials(params);
+	const params = await credentialsParamsLoader(searchParams);
+	prefetchCredentials(params);
 
-  return (
-    <CredentialsContainer>
-      <HydrateClient>
-        <ErrorBoundary fallback={<CredentialsError />}>
-          <Suspense fallback={<CredentialsLoading />}>
-            <CredentialsList />
-          </Suspense>
-        </ErrorBoundary>
-      </HydrateClient>
-    </CredentialsContainer>
-  );
+	return (
+		<CredentialsContainer>
+			<HydrateClient>
+				<ErrorBoundary fallback={<CredentialsError />}>
+					<Suspense fallback={<CredentialsLoading />}>
+						<CredentialsList />
+					</Suspense>
+				</ErrorBoundary>
+			</HydrateClient>
+		</CredentialsContainer>
+	);
 };
 
 export default Credentials;

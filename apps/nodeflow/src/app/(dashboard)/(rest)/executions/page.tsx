@@ -1,41 +1,39 @@
-import { Suspense } from 'react';
-import { SearchParams } from 'nuqs';
-import { ErrorBoundary } from 'react-error-boundary';
-
-import { HydrateClient } from '@/lib/trpc/server';
-
-import { requireAuth } from '@/lib/auth/utils';
-
-import { prefetchExecutions } from '@/features/executions/server/prefetch';
-import { executionsParamsLoader } from '@/features/executions/server/params-loader';
+import type { SearchParams } from "nuqs";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import {
-  ExecutionsContainer,
-  ExecutionsError,
-  ExecutionsList,
-  ExecutionsLoading,
-} from '@/features/executions/components/executions';
+	ExecutionsContainer,
+	ExecutionsError,
+	ExecutionsList,
+	ExecutionsLoading,
+} from "@/features/executions/components/executions";
+import { executionsParamsLoader } from "@/features/executions/server/params-loader";
+
+import { prefetchExecutions } from "@/features/executions/server/prefetch";
+import { requireAuth } from "@/lib/auth/utils";
+import { HydrateClient } from "@/lib/trpc/server";
 
 type Props = {
-  searchParams: Promise<SearchParams>;
+	searchParams: Promise<SearchParams>;
 };
 
 const Executions = async ({ searchParams }: Props) => {
-  await requireAuth();
+	await requireAuth();
 
-  const params = await executionsParamsLoader(searchParams);
-  prefetchExecutions(params);
+	const params = await executionsParamsLoader(searchParams);
+	prefetchExecutions(params);
 
-  return (
-    <ExecutionsContainer>
-      <HydrateClient>
-        <ErrorBoundary fallback={<ExecutionsError />}>
-          <Suspense fallback={<ExecutionsLoading />}>
-            <ExecutionsList />
-          </Suspense>
-        </ErrorBoundary>
-      </HydrateClient>
-    </ExecutionsContainer>
-  );
+	return (
+		<ExecutionsContainer>
+			<HydrateClient>
+				<ErrorBoundary fallback={<ExecutionsError />}>
+					<Suspense fallback={<ExecutionsLoading />}>
+						<ExecutionsList />
+					</Suspense>
+				</ErrorBoundary>
+			</HydrateClient>
+		</ExecutionsContainer>
+	);
 };
 
 export default Executions;

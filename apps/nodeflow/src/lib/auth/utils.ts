@@ -1,28 +1,28 @@
-import 'server-only';
+import "server-only";
 
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { auth } from '@/lib/auth';
+import { auth } from "@/lib/auth";
 
 export const requireAuth = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
 
-  if (!session) {
-    redirect('/login');
-  }
+	if (!session) {
+		redirect("/login");
+	}
 
-  return session;
+	return session;
 };
 
 export const requireUnauth = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
 
-  if (session) {
-    redirect('/');
-  }
+	if (session) {
+		redirect("/");
+	}
 };

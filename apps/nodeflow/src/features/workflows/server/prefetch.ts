@@ -1,6 +1,6 @@
-import type { inferInput } from '@trpc/tanstack-react-query';
+import type { inferInput } from "@trpc/tanstack-react-query";
 
-import { prefetch, trpc } from '@/lib/trpc/server';
+import { prefetch, trpc } from "@/lib/trpc/server";
 
 type Input = inferInput<typeof trpc.workflows.getMany>;
 
@@ -8,12 +8,12 @@ type Input = inferInput<typeof trpc.workflows.getMany>;
  * Prefetch all workflows
  */
 export const prefetchWorkflows = (params: Input) => {
-  return prefetch(trpc.workflows.getMany.queryOptions(params));
+	return prefetch(trpc.workflows.getMany.queryOptions(params));
 };
 
 /**
  * Prefectch a single workflow
  */
 export const prefetchWorkflow = (id: string) => {
-  return prefetch(trpc.workflows.getOne.queryOptions({ id }));
+	return prefetch(trpc.workflows.getOne.queryOptions({ id }));
 };

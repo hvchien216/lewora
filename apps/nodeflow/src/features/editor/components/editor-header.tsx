@@ -1,148 +1,147 @@
-'use client';
-
-import Link from 'next/link';
-import { useAtomValue } from 'jotai';
-import { SaveIcon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+"use client";
 
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-  Input,
-  Button,
-  SidebarTrigger,
-} from '@lewora/ui';
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbSeparator,
+	Button,
+	Input,
+	SidebarTrigger,
+} from "@lewora/ui";
+import { useAtomValue } from "jotai";
+import { SaveIcon } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 import {
-  useSuspenseWorkflow,
-  useUpdateWorkflow,
-  useUpdateWorkflowName,
-} from '@/features/workflows/hooks/use-workflows';
+	useSuspenseWorkflow,
+	useUpdateWorkflow,
+	useUpdateWorkflowName,
+} from "@/features/workflows/hooks/use-workflows";
 
-import { editorAtom } from '../store/atoms';
+import { editorAtom } from "../store/atoms";
 
 export const EditorSaveButton = ({ workflowId }: { workflowId: string }) => {
-  const editor = useAtomValue(editorAtom);
-  const saveWorkflow = useUpdateWorkflow();
+	const editor = useAtomValue(editorAtom);
+	const saveWorkflow = useUpdateWorkflow();
 
-  const handleSave = () => {
-    if (!editor) return;
+	const handleSave = () => {
+		if (!editor) return;
 
-    const nodes = editor.getNodes();
-    const edges = editor.getEdges();
+		const nodes = editor.getNodes();
+		const edges = editor.getEdges();
 
-    saveWorkflow.mutate({ id: workflowId, nodes, edges });
-  };
+		saveWorkflow.mutate({ id: workflowId, nodes, edges });
+	};
 
-  return (
-    <div className="ml-auto">
-      <Button size="sm" onClick={handleSave} disabled={saveWorkflow.isPending}>
-        <SaveIcon className="size-4" />
-        Save
-      </Button>
-    </div>
-  );
+	return (
+		<div className="ml-auto">
+			<Button size="sm" onClick={handleSave} disabled={saveWorkflow.isPending}>
+				<SaveIcon className="size-4" />
+				Save
+			</Button>
+		</div>
+	);
 };
 
 export const EditorNameInput = ({ workflowId }: { workflowId: string }) => {
-  const { data: workflow } = useSuspenseWorkflow(workflowId);
-  const updateWorkflow = useUpdateWorkflowName();
+	const { data: workflow } = useSuspenseWorkflow(workflowId);
+	const updateWorkflow = useUpdateWorkflowName();
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(workflow.name);
+	const [isEditing, setIsEditing] = useState(false);
+	const [name, setName] = useState(workflow.name);
 
-  const inputRef = useRef<HTMLInputElement>(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (workflow.name) {
-      setName(workflow.name);
-    }
-  }, [workflow.name]);
+	useEffect(() => {
+		if (workflow.name) {
+			setName(workflow.name);
+		}
+	}, [workflow.name]);
 
-  useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.select();
-    }
-  }, [isEditing]);
+	useEffect(() => {
+		if (isEditing && inputRef.current) {
+			inputRef.current.focus();
+			inputRef.current.select();
+		}
+	}, [isEditing]);
 
-  const handleSave = async () => {
-    if (name === workflow.name) {
-      setIsEditing(false);
-      return;
-    }
+	const handleSave = async () => {
+		if (name === workflow.name) {
+			setIsEditing(false);
+			return;
+		}
 
-    try {
-      await updateWorkflow.mutateAsync({ id: workflowId, name });
-    } catch {
-      setName(workflow.name);
-    } finally {
-      setIsEditing(false);
-    }
-  };
+		try {
+			await updateWorkflow.mutateAsync({ id: workflowId, name });
+		} catch {
+			setName(workflow.name);
+		} finally {
+			setIsEditing(false);
+		}
+	};
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSave();
-    } else if (e.key === 'Escape') {
-      setName(workflow.name);
-      setIsEditing(false);
-    }
-  };
+	const handleKeyDown = (e: React.KeyboardEvent) => {
+		if (e.key === "Enter") {
+			handleSave();
+		} else if (e.key === "Escape") {
+			setName(workflow.name);
+			setIsEditing(false);
+		}
+	};
 
-  if (isEditing) {
-    return (
-      <Input
-        ref={inputRef}
-        className="h-7 w-auto min-w-[100px] px-2"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        onBlur={handleSave}
-        onKeyDown={handleKeyDown}
-        disabled={updateWorkflow.isPending}
-      />
-    );
-  }
+	if (isEditing) {
+		return (
+			<Input
+				ref={inputRef}
+				className="h-7 w-auto min-w-[100px] px-2"
+				value={name}
+				onChange={(e) => setName(e.target.value)}
+				onBlur={handleSave}
+				onKeyDown={handleKeyDown}
+				disabled={updateWorkflow.isPending}
+			/>
+		);
+	}
 
-  return (
-    <BreadcrumbItem
-      className="transition-colors cursor-pointer hover:text-foreground"
-      onClick={() => setIsEditing(true)}
-    >
-      {workflow.name}
-    </BreadcrumbItem>
-  );
+	return (
+		<BreadcrumbItem
+			className="transition-colors cursor-pointer hover:text-foreground"
+			onClick={() => setIsEditing(true)}
+		>
+			{workflow.name}
+		</BreadcrumbItem>
+	);
 };
 
 export const EditorBreadcrumbs = ({ workflowId }: { workflowId: string }) => {
-  return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/workflows" prefetch>
-              Workflows
-            </Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <EditorNameInput workflowId={workflowId} />
-      </BreadcrumbList>
-    </Breadcrumb>
-  );
+	return (
+		<Breadcrumb>
+			<BreadcrumbList>
+				<BreadcrumbItem>
+					<BreadcrumbLink asChild>
+						<Link href="/workflows" prefetch>
+							Workflows
+						</Link>
+					</BreadcrumbLink>
+				</BreadcrumbItem>
+				<BreadcrumbSeparator />
+				<EditorNameInput workflowId={workflowId} />
+			</BreadcrumbList>
+		</Breadcrumb>
+	);
 };
 
 export const EditorHeader = ({ workflowId }: { workflowId: string }) => {
-  return (
-    <header className="flex items-center gap-2 px-4 border-b h-14 shrink-0 bg-background">
-      <SidebarTrigger />
-      <div className="flex flex-row items-center justify-between w-full gap-x-4">
-        <EditorBreadcrumbs workflowId={workflowId} />
-        <EditorSaveButton workflowId={workflowId} />
-      </div>
-    </header>
-  );
+	return (
+		<header className="flex items-center gap-2 px-4 border-b h-14 shrink-0 bg-background">
+			<SidebarTrigger />
+			<div className="flex flex-row items-center justify-between w-full gap-x-4">
+				<EditorBreadcrumbs workflowId={workflowId} />
+				<EditorSaveButton workflowId={workflowId} />
+			</div>
+		</header>
+	);
 };
