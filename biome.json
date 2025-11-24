@@ -1,0 +1,96 @@
+{
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"includes": [
+			"**",
+			"!node_modules",
+			"!.next",
+			"!dist",
+			"!build",
+			"**/apps/**",
+			"**/packages/**"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 2
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"correctness": {
+				"noUnusedImports": "error",
+				"noUnusedVariables": {
+					"level": "error",
+					"fix": "none"
+				},
+				"useHookAtTopLevel": "warn",
+				"useExhaustiveDependencies": "off"
+			},
+			"suspicious": {
+				"noExplicitAny": "off",
+				"noConfusingVoidType": "off",
+				"noArrayIndexKey": "warn",
+				"noDuplicateProperties": "warn",
+				"noUnknownAtRules": "warn",
+				"noDoubleEquals": "warn"
+			},
+			"a11y": {
+				"useKeyWithClickEvents": "warn",
+				"noStaticElementInteractions": "warn",
+				"noNoninteractiveTabindex": "warn",
+				"useSemanticElements": "warn",
+				"useFocusableInteractive": "warn",
+				"useAriaPropsForRole": "warn",
+				"noRedundantRoles": "off"
+			},
+			"style": {
+				"recommended": true,
+				"noParameterAssign": "warn",
+				"useAsConstAssertion": "error",
+				"useDefaultParameterLast": "error",
+				"useEnumInitializers": "error",
+				"useSelfClosingElements": "error",
+				"useSingleVarDeclarator": "error",
+				"noUnusedTemplateLiteral": "error",
+				"useNumberNamespace": "error",
+				"noInferrableTypes": "error",
+				"noUselessElse": "error",
+				"useNodejsImportProtocol": "off"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "warn"
+			}
+		},
+		"domains": {
+			"next": "recommended",
+			"react": "recommended"
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double"
+		}
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
+	},
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	}
+}

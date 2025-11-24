@@ -1,183 +1,182 @@
-'use client';
+"use client";
 
-import { z } from 'zod';
-import { useEffect } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  useForm,
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  Button,
-  Textarea,
-} from '@lewora/ui';
+	Button,
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	Input,
+	Textarea,
+	useForm,
+} from "@lewora/ui";
+import { useEffect } from "react";
+import { z } from "zod";
 
 const formSchema = z.object({
-  variableName: z
-    .string()
-    .min(1, { message: 'Variable name is required' })
-    .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
-      message:
-        'Variable name must start with a letter, underscore, or dollar sign and contain only letters, numbers, underscores, or dollar signs',
-    }),
-  username: z.string().optional(),
-  content: z
-    .string()
-    .min(1, 'Message content is required')
-    .max(2000, 'Discord messages cannot exceed 2000 characters'),
-  webhookUrl: z.string().min(1, 'Webhook URL is required'),
+	variableName: z
+		.string()
+		.min(1, { message: "Variable name is required" })
+		.regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
+			message:
+				"Variable name must start with a letter, underscore, or dollar sign and contain only letters, numbers, underscores, or dollar signs",
+		}),
+	username: z.string().optional(),
+	content: z
+		.string()
+		.min(1, "Message content is required")
+		.max(2000, "Discord messages cannot exceed 2000 characters"),
+	webhookUrl: z.string().min(1, "Webhook URL is required"),
 });
 
 export type DiscordFormValues = z.infer<typeof formSchema>;
 
 interface Props {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSubmit: (values: z.infer<typeof formSchema>) => void;
-  defaultValues?: Partial<DiscordFormValues>;
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	onSubmit: (values: z.infer<typeof formSchema>) => void;
+	defaultValues?: Partial<DiscordFormValues>;
 }
 
 export const DiscordDialog = ({
-  open,
-  onOpenChange,
-  onSubmit,
-  defaultValues = {},
+	open,
+	onOpenChange,
+	onSubmit,
+	defaultValues = {},
 }: Props) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      variableName: defaultValues.variableName || '',
-      username: defaultValues.username || '',
-      content: defaultValues.content || '',
-      webhookUrl: defaultValues.webhookUrl || '',
-    },
-  });
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			variableName: defaultValues.variableName || "",
+			username: defaultValues.username || "",
+			content: defaultValues.content || "",
+			webhookUrl: defaultValues.webhookUrl || "",
+		},
+	});
 
-  // Reset form values when dialog opens with new defaults
-  useEffect(() => {
-    if (open) {
-      form.reset({
-        variableName: defaultValues.variableName || '',
-        username: defaultValues.username || '',
-        content: defaultValues.content || '',
-        webhookUrl: defaultValues.webhookUrl || '',
-      });
-    }
-  }, [defaultValues, form, open]);
+	// Reset form values when dialog opens with new defaults
+	useEffect(() => {
+		if (open) {
+			form.reset({
+				variableName: defaultValues.variableName || "",
+				username: defaultValues.username || "",
+				content: defaultValues.content || "",
+				webhookUrl: defaultValues.webhookUrl || "",
+			});
+		}
+	}, [defaultValues, form, open]);
 
-  const formVariableName = form.watch('variableName') || 'myDiscord';
+	const formVariableName = form.watch("variableName") || "myDiscord";
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    onSubmit(values);
-    onOpenChange(false);
-  };
+	const handleSubmit = (values: z.infer<typeof formSchema>) => {
+		onSubmit(values);
+		onOpenChange(false);
+	};
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Discord Configuration</DialogTitle>
-          <DialogDescription>
-            Configure the Discord webhook settings for this node.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="mt-4 space-y-8"
-          >
-            <FormField
-              control={form.control}
-              name="variableName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Variable Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="myDiscord" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Use this name to reference the result in the other nodes:{' '}
-                    {`{{${formVariableName}.text}}`}
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="webhookUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Webhook URL</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="https://discord.com/api/webhooks/..."
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Get this from Discord: Channel Settings &rarr; Integrations
-                    &rarr; Webhooks
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Message Content</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Summary {{myGemini.text}}"
-                      className="min-h-[80px] font-mono text-sm"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    The message to send. Use {'{{variables}}'} for simple values
-                    or {'{{json variable}}'} to stringify objects
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bot Username (Optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Workflow Bot" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Override the webhook&apos;s default username
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter className="mt-4">
-              <Button type="submit">Save</Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
+	return (
+		<Dialog open={open} onOpenChange={onOpenChange}>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Discord Configuration</DialogTitle>
+					<DialogDescription>
+						Configure the Discord webhook settings for this node.
+					</DialogDescription>
+				</DialogHeader>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(handleSubmit)}
+						className="mt-4 space-y-8"
+					>
+						<FormField
+							control={form.control}
+							name="variableName"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Variable Name</FormLabel>
+									<FormControl>
+										<Input placeholder="myDiscord" {...field} />
+									</FormControl>
+									<FormDescription>
+										Use this name to reference the result in the other nodes:{" "}
+										{`{{${formVariableName}.text}}`}
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="webhookUrl"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Webhook URL</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="https://discord.com/api/webhooks/..."
+											{...field}
+										/>
+									</FormControl>
+									<FormDescription>
+										Get this from Discord: Channel Settings &rarr; Integrations
+										&rarr; Webhooks
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="content"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Message Content</FormLabel>
+									<FormControl>
+										<Textarea
+											placeholder="Summary {{myGemini.text}}"
+											className="min-h-[80px] font-mono text-sm"
+											{...field}
+										/>
+									</FormControl>
+									<FormDescription>
+										The message to send. Use {"{{variables}}"} for simple values
+										or {"{{json variable}}"} to stringify objects
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="username"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Bot Username (Optional)</FormLabel>
+									<FormControl>
+										<Input placeholder="Workflow Bot" {...field} />
+									</FormControl>
+									<FormDescription>
+										Override the webhook&apos;s default username
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<DialogFooter className="mt-4">
+							<Button type="submit">Save</Button>
+						</DialogFooter>
+					</form>
+				</Form>
+			</DialogContent>
+		</Dialog>
+	);
 };
