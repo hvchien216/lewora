@@ -10,8 +10,8 @@ import {
 import { credentialsParamsLoader } from "@/features/credentials/server/params-loader";
 
 import { prefetchCredentials } from "@/features/credentials/server/prefetch";
-import { requireAuth } from "@/lib/auth-utils";
-import { HydrateClient } from "@/trpc/server";
+import { requireAuth } from "@/lib/auth/utils";
+import { HydrateClient } from "@/lib/trpc/server";
 
 type Props = {
 	searchParams: Promise<SearchParams>;

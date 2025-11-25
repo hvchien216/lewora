@@ -3,15 +3,23 @@
 	"version": "0.0.0",
 	"license": "MIT",
 	"scripts": {
+		"// Development": "",
+		"dev:nodeflow": "nx run @lewora/nodeflow:dev",
+		"// Build": "",
+		"build:all": "nx run-many --target=build --all",
+		"// Clean": "",
+		"clean": "nx run-many --target=clean && rm -rf node_modules .nx",
+		"// Nx Utilities": "",
+		"graph": "nx graph",
+		"affected": "nx affected:graph",
+		"affected:build": "nx affected --target=build",
+		"affected:test": "nx affected --target=test",
+		"// Linting": "",
 		"lint:check": "biome check",
-		"lint:fix": "biome check --write"
+		"lint:fix": "biome check --write ."
 	},
 	"private": true,
-	"dependencies": {
-		"next": "~15.2.4",
-		"react": "^19.0.0",
-		"react-dom": "^19.0.0"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@babel/core": "^7.14.5",
 		"@babel/preset-react": "^7.14.5",

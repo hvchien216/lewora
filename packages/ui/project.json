@@ -1,0 +1,33 @@
+{
+	"name": "@lewora/ui",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"root": "packages/ui",
+	"sourceRoot": "packages/ui/src",
+	"projectType": "library",
+	"targets": {
+		"dev": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "vite build --watch",
+				"cwd": "{projectRoot}"
+			},
+			"outputs": ["{projectRoot}/dist"]
+		},
+		"build": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "vite build",
+				"cwd": "{projectRoot}"
+			},
+			"outputs": ["{projectRoot}/dist"],
+			"cache": true
+		},
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "rm -rf dist node_modules",
+				"cwd": "{projectRoot}"
+			}
+		}
+	}
+}
