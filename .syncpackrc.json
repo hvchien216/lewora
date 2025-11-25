@@ -1,0 +1,10 @@
+{
+	"versionGroups": [
+		{
+			"label": "Ignore workspace packages",
+			"dependencies": ["@lewora/**"],
+			"packages": ["**"],
+			"isIgnored": true
+		}
+	]
+}
