@@ -1,0 +1,42 @@
+{
+	"name": "@lewora/nodeflow",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"root": "apps/nodeflow",
+	"sourceRoot": "apps/nodeflow/src",
+	"projectType": "application",
+	"targets": {
+		"dev": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "next dev --turbopack",
+				"cwd": "{projectRoot}"
+			},
+			"dependsOn": [{ "projects": ["@lewora/ui"], "target": "build" }]
+		},
+		"build": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "next build",
+				"cwd": "{projectRoot}"
+			},
+			"inputs": ["production", "^production"],
+			"outputs": ["{projectRoot}/.next"],
+			"cache": true,
+			"dependsOn": [{ "projects": ["@lewora/ui"], "target": "build" }]
+		},
+		"serve": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "next start",
+				"cwd": "{projectRoot}"
+			}
+		},
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "rm -rf .next node_modules",
+				"cwd": "{projectRoot}"
+			}
+		}
+	}
+}

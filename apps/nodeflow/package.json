@@ -2,6 +2,10 @@
 	"name": "@lewora/nodeflow",
 	"version": "0.0.1",
 	"private": true,
+	"scripts": {
+		"dev": "next dev --turbopack",
+		"build": "next build"
+	},
 	"dependencies": {
 		"@ai-sdk/anthropic": "^2.0.45",
 		"@ai-sdk/google": "^2.0.39",

@@ -13,58 +13,27 @@
 		"sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
 	},
 	"nxCloudId": "690b1eae0b43db7aa6b48de3",
-	"plugins": [
-		{
-			"plugin": "@nx/js/typescript",
-			"options": {
-				"typecheck": {
-					"targetName": "typecheck"
-				},
-				"build": {
-					"targetName": "build",
-					"configName": "tsconfig.lib.json",
-					"buildDepsName": "build-deps",
-					"watchDepsName": "watch-deps"
-				}
-			}
-		},
-		{
-			"plugin": "@nx/next/plugin",
-			"options": {
-				"startTargetName": "start",
-				"buildTargetName": "build",
-				"devTargetName": "dev",
-				"serveStaticTargetName": "serve-static",
-				"buildDepsTargetName": "build-deps",
-				"watchDepsTargetName": "watch-deps"
-			}
-		},
-		{
-			"plugin": "@nx/jest/plugin",
-			"options": {
-				"targetName": "test"
-			}
-		},
-		{
-			"plugin": "@nx/vite/plugin",
-			"options": {
-				"buildTargetName": "build",
-				"testTargetName": "test",
-				"serveTargetName": "serve",
-				"devTargetName": "dev",
-				"previewTargetName": "preview",
-				"serveStaticTargetName": "serve-static",
-				"typecheckTargetName": "typecheck",
-				"buildDepsTargetName": "build-deps",
-				"watchDepsTargetName": "watch-deps"
-			}
-		}
-	],
 	"targetDefaults": {
-		"test": {
+		"build": {
+			"cache": true,
 			"dependsOn": ["^build"]
+		},
+		"dev": {
+			"dependsOn": ["^build"]
+		},
+		"serve": {
+			"dependsOn": ["build"],
+			"cache": false
+		},
+		"clean": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "rm -rf dist node_modules",
+				"cwd": "{projectRoot}"
+			}
 		}
 	},
+	"plugins": [],
 	"generators": {
 		"@nx/next": {
 			"application": {
