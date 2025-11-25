@@ -1,6 +1,7 @@
 import "./styles/globals.css";
 
 export * from "./components/ui/accordion";
+export * from "./components/ui/action-button";
 export * from "./components/ui/alert";
 export * from "./components/ui/alert-dialog";
 export * from "./components/ui/aspect-ratio";
