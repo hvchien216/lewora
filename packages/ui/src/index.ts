@@ -1,5 +1,8 @@
 import "./styles/globals.css";
 
+export * from "./components/rhf/form-base";
+export * from "./components/rhf/rhf-input";
+export * from "./components/rhf/rhf-textarea";
 export * from "./components/ui/accordion";
 export * from "./components/ui/action-button";
 export * from "./components/ui/alert";
