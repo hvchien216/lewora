@@ -1,0 +1,19 @@
+{
+	"name": "@lewora/mf-remote",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"root": "apps/mf-remote",
+	"sourceRoot": "apps/mf-remote/src",
+	"projectType": "application",
+	"targets": {
+		"dev": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "rsbuild dev",
+				"cwd": "{projectRoot}",
+				"options": {
+					"port": 4002
+				}
+			}
+		}
+	}
+}

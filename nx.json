@@ -16,10 +16,20 @@
 	"targetDefaults": {
 		"build": {
 			"cache": true,
-			"dependsOn": ["^build"]
+			"dependsOn": ["^build"],
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "rsbuild build",
+				"cwd": "{projectRoot}"
+			}
 		},
 		"dev": {
-			"dependsOn": ["^build"]
+			"dependsOn": ["^build"],
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "rsbuild dev",
+				"cwd": "{projectRoot}"
+			}
 		},
 		"serve": {
 			"dependsOn": ["build"],
@@ -42,7 +52,18 @@
 		},
 		"@nx/react": {
 			"library": {
+				"style": "none",
+				"linter": "none",
 				"unitTestRunner": "none"
+			},
+			"application": {
+				"babel": true,
+				"style": "none",
+				"linter": "none",
+				"bundler": "rsbuild"
+			},
+			"component": {
+				"style": "none"
 			}
 		}
 	}

@@ -1,0 +1,16 @@
+{
+	"name": "@lewora/mf-host",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"root": "apps/mf-host",
+	"sourceRoot": "apps/mf-host/src",
+	"projectType": "application",
+	"targets": {
+		"dev": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "rsbuild dev",
+				"cwd": "{projectRoot}"
+			}
+		}
+	}
+}
